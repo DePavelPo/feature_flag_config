@@ -19,9 +19,6 @@ func (s *Service) checkFeature(
 	reason string,
 ) {
 	feature := cache.Feature{}
-
-	logrus.Infof("feature name %s", featureName)
-	logrus.Infof("item id %s", *itemID)
 	if err := feature.GetByName(ctx, featureName, s.redisDB); err != nil {
 		logrus.Errorf("GetByName error: %v", err)
 	}

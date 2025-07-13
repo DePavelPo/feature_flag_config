@@ -75,7 +75,7 @@ func (f *Feature) GetByName(ctx context.Context, featureName string, db *redis.C
 	}
 
 	if len(redisData.Val()) == 0 {
-		return errors.Errorf("no data for key %s", featureName)
+		return nil
 	}
 
 	// set all simple types
