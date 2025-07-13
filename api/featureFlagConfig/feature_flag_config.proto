@@ -1,0 +1,74 @@
+syntax = "proto3";
+package api.feature_flag_config;
+
+option go_package = "./feature_flag_config";
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+
+service FeatureFlagConfigService {
+    rpc SetFeature(SetFeatureRequest) returns (SetFeatureResponse) {
+        option (google.api.http) = {
+            post: "/v1/feature/set"
+            body: "*"
+        };
+    }
+    rpc GetFeaturesByOptions(GetFeaturesByOptionsRequest) returns (GetFeaturesByOptionsResponse) {
+        option (google.api.http) = {
+            post: "/v1/feature/getByOptions"
+            body: "*"
+        };
+    }
+    rpc CheckFeatureAvailability(FeatureAvailabilityRequest) returns (FeatureAvailabilityResponse) {
+        option (google.api.http) = {
+            post: "/v1/feature/check"
+            body: "*"
+        };
+    }
+}
+
+message Error {
+  int64 code = 1;
+  string message = 2;
+  google.protobuf.Struct details = 3;
+}
+
+message SetFeatureRequest { 
+    string name = 1;
+    bool is_active = 2;
+    int32 buckets_opened = 3;
+    repeated string white_list = 4;
+    repeated string black_list = 5;
+}
+
+message SetFeatureResponse {}
+
+message GetFeaturesByOptionsRequest {
+    repeated string feature_names = 1;
+    optional bool is_active = 2;
+}
+
+message GetFeaturesByOptionsResponse {
+    message GetFeaturesByOptionsResponseData{
+        string name = 1;
+        bool is_active = 2;
+        int32 buckets_opened = 3;
+        repeated string white_list = 4;
+        repeated string black_list = 5;
+    }
+    repeated GetFeaturesByOptionsResponseData data = 1;
+    Error error = 2;
+}
+
+message FeatureAvailabilityRequest {
+    string feature_name = 1;
+    optional string item_id = 2;
+}
+
+message FeatureAvailabilityResponse {
+    message FeatureAvailabilityResponseData {
+        bool enabled = 1;
+        string reason = 2;
+    }
+    FeatureAvailabilityResponseData data = 1;
+    Error error = 2;
+}
