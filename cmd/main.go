@@ -73,7 +73,6 @@ func main() {
 		}
 		logrus.Fatalf("http server error: %v", srv.ListenAndServe())
 	}()
-	logrus.Info("waiting for wg...")
 
 	wg.Wait()
 }
